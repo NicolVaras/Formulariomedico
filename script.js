@@ -121,25 +121,20 @@ function guardarFicha() {
   window.location.href = "agradecimiento.html";
 }
 
-function buscarPorApellido() {
-  const apellidoBuscado = document.getElementById("buscarApellido").value.trim().toLowerCase();
+function buscarPorRut() {
+  const rutBuscado = document.getElementById("buscarRut").value.trim().toUpperCase();
 
-  for (let key in localStorage) {
-    if (localStorage.hasOwnProperty(key)) {
-      try {
-        const ficha = JSON.parse(localStorage.getItem(key));
-        if (ficha.apellidoPaterno && ficha.apellidoPaterno.toLowerCase() === apellidoBuscado) {
-          sessionStorage.setItem("pacienteBuscado", JSON.stringify(ficha));
-          window.location.href = "datosBusqueda.html";
-          return;
-        }
-      } catch (e) {
-        console.error("Error al leer una ficha:", e);
-      }
-    }
+  const fichaGuardada = localStorage.getItem(rutBuscado);
+  if (fichaGuardada) {
+    const ficha = JSON.parse(fichaGuardada);
+    sessionStorage.setItem("pacienteBuscado", JSON.stringify(ficha));
+    window.location.href = "datosBusqueda.html";
+  } else {
+    alert("No se encontró un paciente con ese RUT.");
   }
-
-  alert("No se encontró ningún paciente con ese apellido paterno.");
 }
+
+// Configuración del campo de fecha para no permitir fechas futuras
+document.getElementById("nacimiento").setAttribute("max", new Date().toISOString().split("T")[0]);
 
 
