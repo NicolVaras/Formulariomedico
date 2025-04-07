@@ -14,10 +14,7 @@ function calcularDV(rut) {
 }
 
 function validarRut(rutNumero, rutDV) {
-  if (!/^\d{7,8}$/.test(rutNumero)) {
-    alert("Ingrese un RUT válido (solo números).");
-    return false;
-  }
+  if (!/^\d{7,8}$/.test(rutNumero)) return false;
   const dvCalculado = calcularDV(rutNumero);
   return dvCalculado === rutDV.toUpperCase();
 }
@@ -26,12 +23,8 @@ function guardarFicha() {
   const rutNumero = document.getElementById("rutNumero").value.trim();
   const rutDV = document.getElementById("rutDV").value.trim().toUpperCase();
   const nombres = document.getElementById("nombres").value.trim();
-  const apellidoPaterno = document
-    .getElementById("apellidoPaterno")
-    .value.trim();
-  const apellidoMaterno = document
-    .getElementById("apellidoMaterno")
-    .value.trim();
+  const apellidoPaterno = document.getElementById("apellidoPaterno").value.trim();
+  const apellidoMaterno = document.getElementById("apellidoMaterno").value.trim();
   const direccion = document.getElementById("direccion").value.trim();
   const ciudad = document.getElementById("ciudad").value.trim();
   const telefono = document.getElementById("telefono").value.trim();
@@ -39,15 +32,13 @@ function guardarFicha() {
   const nacimiento = document.getElementById("nacimiento").value;
   const estadoCivil = document.getElementById("estadoCivil").value;
   const comentarios = document.getElementById("comentarios").value.trim();
+
+  // Regex para validar solo letras en nombres y apellidos
   const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/;
 
-  if (!rutNumero) {
-    alert("Complete el campo de RUT número (solo números).");
-    return;
-  }
-
-  if (!rutDV) {
-    alert("Complete el campo de RUT dígito verificador.");
+  // Validaciones
+  if (!rutNumero || !/^\d+$/.test(rutNumero)) {
+    alert("Ingrese un RUT válido.");
     return;
   }
 
@@ -56,73 +47,52 @@ function guardarFicha() {
     return;
   }
 
-  if (!nombres) {
-    alert("Complete el campo de nombres.");
-    return;
-  } else if (!nombreRegex.test(nombres)) {
+  if (!nombres || !nombreRegex.test(nombres)) {
     alert("Ingrese un nombre válido (solo letras y espacios).");
     return;
   }
 
-  if (!apellidoPaterno) {
-    alert("Complete el campo de apellido paterno.");
-    return;
-  } else if (!nombreRegex.test(apellidoPaterno)) {
+  if (!apellidoPaterno || !nombreRegex.test(apellidoPaterno)) {
     alert("Ingrese un apellido paterno válido (solo letras).");
     return;
   }
 
-  if (!apellidoMaterno) {
-    alert("Complete el campo de apellido materno.");
-    return;
-  } else if (!nombreRegex.test(apellidoMaterno)) {
+  if (!apellidoMaterno || !nombreRegex.test(apellidoMaterno)) {
     alert("Ingrese un apellido materno válido (solo letras).");
     return;
   }
 
-  if (!direccion) {
-    alert("Complete el campo de dirección.");
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    alert("Email inválido. Ingrese un correo electrónico válido.");
     return;
   }
 
-  if (!ciudad) {
-    alert("Complete el campo de ciudad.");
+  const hoy = new Date().toISOString().split("T")[0];
+  if (!nacimiento || nacimiento > hoy) {
+    alert("Fecha de nacimiento inválida. No puede ser en el futuro.");
     return;
   }
 
-  if (!telefono) {
-    alert("Complete el campo de teléfono.");
-    return;
-  } else if (!/^\d{7,15}$/.test(telefono)) {
+  if (!/^\d{7,15}$/.test(telefono)) {
     alert("Teléfono inválido. Solo números y entre 7 a 15 dígitos.");
     return;
   }
 
-  if (!email) {
-    alert("Complete el campo de email.");
+  if (!email.includes("@")) {
+    alert("Email inválido.");
     return;
-  } else {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) {
-      alert("Email inválido. Ingrese un correo electrónico válido.");
-      return;
-    }
   }
 
-  if (!nacimiento) {
-    alert("Complete el campo de fecha de nacimiento.");
-    return;
-  } else {
-    const hoy = new Date().toISOString().split("T")[0];
-    if (nacimiento > hoy) {
-      alert("Fecha de nacimiento inválida. No puede ser en el futuro.");
+  // Verificación de campos vacíos
+  const campos = [rutNumero, rutDV, nombres, apellidoPaterno, apellidoMaterno, direccion, ciudad, telefono, email, nacimiento, estadoCivil];
+  const camposNombres = ["RUT", "Nombre", "Apellido Paterno", "Apellido Materno", "Dirección", "Ciudad", "Teléfono", "Email", "Fecha de Nacimiento", "Estado Civil"];
+
+  for (let i = 0; i < campos.length; i++) {
+    if (!campos[i]) {
+      alert(`Por favor, rellene el campo de ${camposNombres[i]}.`);
       return;
     }
-  }
-
-  if (!estadoCivil) {
-    alert("Complete el campo de estado civil.");
-    return;
   }
 
   const rutCompleto = `${rutNumero}-${rutDV}`;
@@ -152,19 +122,13 @@ function guardarFicha() {
 }
 
 function buscarPorApellido() {
-  const apellidoBuscado = document
-    .getElementById("buscarApellido")
-    .value.trim()
-    .toLowerCase();
+  const apellidoBuscado = document.getElementById("buscarApellido").value.trim().toLowerCase();
 
   for (let key in localStorage) {
     if (localStorage.hasOwnProperty(key)) {
       try {
         const ficha = JSON.parse(localStorage.getItem(key));
-        if (
-          ficha.apellidoPaterno &&
-          ficha.apellidoPaterno.toLowerCase() === apellidoBuscado
-        ) {
+        if (ficha.apellidoPaterno && ficha.apellidoPaterno.toLowerCase() === apellidoBuscado) {
           sessionStorage.setItem("pacienteBuscado", JSON.stringify(ficha));
           window.location.href = "datosBusqueda.html";
           return;
@@ -178,5 +142,4 @@ function buscarPorApellido() {
   alert("No se encontró ningún paciente con ese apellido paterno.");
 }
 
-}
 
