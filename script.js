@@ -45,23 +45,43 @@ function guardarFicha() {
   const comentarios = document.getElementById("comentarios").value.trim();
   const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/;
 
+  if (!rutNumero) {
+    alert("Complete el campo de RUT número.");
+    return;
+  }
+
+  if (!rutDV) {
+    alert("Complete el campo de RUT dígito verificador.");
+    return;
+  }
+
   if (!nombres || !nombreRegex.test(nombres)) {
-    alert("Ingrese un nombre válido (solo letras y espacios).");
+    alert("Complete el campo de nombres con un nombre válido (solo letras y espacios).");
     return;
   }
 
   if (!apellidoPaterno || !nombreRegex.test(apellidoPaterno)) {
-    alert("Ingrese un apellido paterno válido (solo letras).");
+    alert("Complete el campo de apellido paterno con un apellido válido (solo letras).");
     return;
   }
   if (!apellidoMaterno || !nombreRegex.test(apellidoMaterno)) {
-    alert("Ingrese un apellido materno válido (solo letras).");
+    alert("Complete el campo de apellido materno con un apellido válido (solo letras).");
+    return;
+  }
+
+  if (!direccion) {
+    alert("Complete el campo de dirección.");
+    return;
+  }
+
+  if (!ciudad) {
+    alert("Complete el campo de ciudad.");
     return;
   }
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(email)) {
-    alert("Email inválido. Ingrese un correo electrónico válido.");
+  if (!email || !emailRegex.test(email)) {
+    alert("Complete el campo de email con un correo electrónico válido.");
     return;
   }
 
@@ -77,6 +97,16 @@ function guardarFicha() {
 
   if (!/^\d{7,15}$/.test(telefono)) {
     alert("Teléfono inválido. Solo números y entre 7 a 15 dígitos.");
+    return;
+  }
+
+  if (!telefono) {
+    alert("Complete el campo de teléfono.");
+    return;
+  }
+
+  if (!estadoCivil) {
+    alert("Complete el campo de estado civil.");
     return;
   }
 
@@ -132,39 +162,4 @@ function buscarPorApellido() {
 
   alert("No se encontró ningún paciente con ese apellido paterno.");
 }
-
-// Función para rellenar campos automáticamente al cargar la página
-function rellenarCampos() {
-  // Simula datos para rellenar los campos
-  const datos = {
-    rutNumero: "12345678",
-    rutDV: "K",
-    nombres: "Juan Pedro",
-    apellidoPaterno: "González",
-    apellidoMaterno: "Rodríguez",
-    direccion: "Calle Principal 123",
-    ciudad: "Santiago",
-    telefono: "123456789",
-    email: "juan@example.com",
-    nacimiento: "1990-01-01",
-    estadoCivil: "Soltero",
-    comentarios: "Sin comentarios",
-  };
-
-  document.getElementById("rutNumero").value = datos.rutNumero;
-  document.getElementById("rutDV").value = datos.rutDV;
-  document.getElementById("nombres").value = datos.nombres;
-  document.getElementById("apellidoPaterno").value = datos.apellidoPaterno;
-  document.getElementById("apellidoMaterno").value = datos.apellidoMaterno;
-  document.getElementById("direccion").value = datos.direccion;
-  document.getElementById("ciudad").value = datos.ciudad;
-  document.getElementById("telefono").value = datos.telefono;
-  document.getElementById("email").value = datos.email;
-  document.getElementById("nacimiento").value = datos.nacimiento;
-  document.getElementById("estadoCivil").value = datos.estadoCivil;
-  document.getElementById("comentarios").value = datos.comentarios;
-}
-
-// Llama a la función para rellenar campos al cargar la página
-document.addEventListener('DOMContentLoaded', rellenarCampos);
 
