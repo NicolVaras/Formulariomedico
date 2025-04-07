@@ -54,12 +54,12 @@ function guardarFicha() {
     return;
   }
 
-  // Validación de email
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(email)) {
-    alert("Email inválido. Ingrese un correo electrónico válido.");
-    return;
-  }
+// Validación de email
+const emailRegex = /^[a-zA-Z0-9._-]+@(gmail\.com|hotmail\.com|outlook\.com)$/;
+if (!emailRegex.test(email)) {
+  alert("Email inválido. Ingrese un correo electrónico válido (solo Gmail, Hotmail, o Outlook).");
+  return;
+}
 
   // Validación de fecha de nacimiento
   const hoy = new Date().toISOString().split("T")[0];
