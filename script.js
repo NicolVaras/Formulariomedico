@@ -14,9 +14,16 @@ function calcularDV(rut) {
 }
 
 function validarRut(rutNumero, rutDV) {
-  if (!/^\d{7,8}$/.test(rutNumero)) return false;
+  if (!/^\d{7,8}$/.test(rutNumero)) {
+    alert("Ingrese un RUT válido (solo números).");
+    return false;
+  }
   const dvCalculado = calcularDV(rutNumero);
-  return dvCalculado === rutDV.toUpperCase();
+  if (dvCalculado !== rutDV.toUpperCase()) {
+    alert("RUT inválido. Verifica el número y el dígito verificador.");
+    return false;
+  }
+  return true;
 }
 
 function guardarFicha() {
@@ -65,17 +72,11 @@ function guardarFicha() {
   }
 
   if (!validarRut(rutNumero, rutDV)) {
-    alert("RUT inválido. Verifica el número y el dígito verificador.");
     return;
   }
 
   if (!/^\d{7,15}$/.test(telefono)) {
     alert("Teléfono inválido. Solo números y entre 7 a 15 dígitos.");
-    return;
-  }
-
-  if (!email.includes("@")) {
-    alert("Email inválido.");
     return;
   }
 
@@ -131,3 +132,39 @@ function buscarPorApellido() {
 
   alert("No se encontró ningún paciente con ese apellido paterno.");
 }
+
+// Función para rellenar campos automáticamente al cargar la página
+function rellenarCampos() {
+  // Simula datos para rellenar los campos
+  const datos = {
+    rutNumero: "12345678",
+    rutDV: "K",
+    nombres: "Juan Pedro",
+    apellidoPaterno: "González",
+    apellidoMaterno: "Rodríguez",
+    direccion: "Calle Principal 123",
+    ciudad: "Santiago",
+    telefono: "123456789",
+    email: "juan@example.com",
+    nacimiento: "1990-01-01",
+    estadoCivil: "Soltero",
+    comentarios: "Sin comentarios",
+  };
+
+  document.getElementById("rutNumero").value = datos.rutNumero;
+  document.getElementById("rutDV").value = datos.rutDV;
+  document.getElementById("nombres").value = datos.nombres;
+  document.getElementById("apellidoPaterno").value = datos.apellidoPaterno;
+  document.getElementById("apellidoMaterno").value = datos.apellidoMaterno;
+  document.getElementById("direccion").value = datos.direccion;
+  document.getElementById("ciudad").value = datos.ciudad;
+  document.getElementById("telefono").value = datos.telefono;
+  document.getElementById("email").value = datos.email;
+  document.getElementById("nacimiento").value = datos.nacimiento;
+  document.getElementById("estadoCivil").value = datos.estadoCivil;
+  document.getElementById("comentarios").value = datos.comentarios;
+}
+
+// Llama a la función para rellenar campos al cargar la página
+document.addEventListener('DOMContentLoaded', rellenarCampos);
+
