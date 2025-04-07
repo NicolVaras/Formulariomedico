@@ -19,11 +19,7 @@ function validarRut(rutNumero, rutDV) {
     return false;
   }
   const dvCalculado = calcularDV(rutNumero);
-  if (dvCalculado !== rutDV.toUpperCase()) {
-    alert("RUT inválido. Verifica el número y el dígito verificador.");
-    return false;
-  }
-  return true;
+  return dvCalculado === rutDV.toUpperCase();
 }
 
 function guardarFicha() {
@@ -46,7 +42,7 @@ function guardarFicha() {
   const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/;
 
   if (!rutNumero) {
-    alert("Complete el campo de RUT número.");
+    alert("Complete el campo de RUT número (solo números).");
     return;
   }
 
@@ -55,17 +51,32 @@ function guardarFicha() {
     return;
   }
 
-  if (!nombres || !nombreRegex.test(nombres)) {
-    alert("Complete el campo de nombres con un nombre válido (solo letras y espacios).");
+  if (!validarRut(rutNumero, rutDV)) {
+    alert("RUT inválido. Verifica el número y el dígito verificador.");
     return;
   }
 
-  if (!apellidoPaterno || !nombreRegex.test(apellidoPaterno)) {
-    alert("Complete el campo de apellido paterno con un apellido válido (solo letras).");
+  if (!nombres) {
+    alert("Complete el campo de nombres.");
+    return;
+  } else if (!nombreRegex.test(nombres)) {
+    alert("Ingrese un nombre válido (solo letras y espacios).");
     return;
   }
-  if (!apellidoMaterno || !nombreRegex.test(apellidoMaterno)) {
-    alert("Complete el campo de apellido materno con un apellido válido (solo letras).");
+
+  if (!apellidoPaterno) {
+    alert("Complete el campo de apellido paterno.");
+    return;
+  } else if (!nombreRegex.test(apellidoPaterno)) {
+    alert("Ingrese un apellido paterno válido (solo letras).");
+    return;
+  }
+
+  if (!apellidoMaterno) {
+    alert("Complete el campo de apellido materno.");
+    return;
+  } else if (!nombreRegex.test(apellidoMaterno)) {
+    alert("Ingrese un apellido materno válido (solo letras).");
     return;
   }
 
@@ -79,30 +90,34 @@ function guardarFicha() {
     return;
   }
 
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!email || !emailRegex.test(email)) {
-    alert("Complete el campo de email con un correo electrónico válido.");
+  if (!telefono) {
+    alert("Complete el campo de teléfono.");
     return;
-  }
-
-  const hoy = new Date().toISOString().split("T")[0];
-  if (!nacimiento || nacimiento > hoy) {
-    alert("Fecha de nacimiento inválida. No puede ser en el futuro.");
-    return;
-  }
-
-  if (!validarRut(rutNumero, rutDV)) {
-    return;
-  }
-
-  if (!/^\d{7,15}$/.test(telefono)) {
+  } else if (!/^\d{7,15}$/.test(telefono)) {
     alert("Teléfono inválido. Solo números y entre 7 a 15 dígitos.");
     return;
   }
 
-  if (!telefono) {
-    alert("Complete el campo de teléfono.");
+  if (!email) {
+    alert("Complete el campo de email.");
     return;
+  } else {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      alert("Email inválido. Ingrese un correo electrónico válido.");
+      return;
+    }
+  }
+
+  if (!nacimiento) {
+    alert("Complete el campo de fecha de nacimiento.");
+    return;
+  } else {
+    const hoy = new Date().toISOString().split("T")[0];
+    if (nacimiento > hoy) {
+      alert("Fecha de nacimiento inválida. No puede ser en el futuro.");
+      return;
+    }
   }
 
   if (!estadoCivil) {
@@ -161,5 +176,7 @@ function buscarPorApellido() {
   }
 
   alert("No se encontró ningún paciente con ese apellido paterno.");
+}
+
 }
 
