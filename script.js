@@ -1,4 +1,3 @@
-// Función para calcular el DV
 function calcularDV(rut) {
   let suma = 0;
   let multiplo = 2;
@@ -14,26 +13,22 @@ function calcularDV(rut) {
   return resto.toString();
 }
 
-// Función para validar el RUT con su DV
-function validarRut(rutCompleto) {
-  const rutSplit = rutCompleto.split('-');
-  if (rutSplit.length !== 2 || !/^\d{7,8}$/.test(rutSplit[0]) || !/^[0-9Kk]{1}$/.test(rutSplit[1])) {
-    return false;
-  }
-
-  const rutNumero = rutSplit[0];
-  const rutDV = rutSplit[1].toUpperCase();
-
+function validarRut(rutNumero, rutDV) {
+  if (!/^\d{7,8}$/.test(rutNumero)) return false;
   const dvCalculado = calcularDV(rutNumero);
-  return dvCalculado === rutDV;
+  return dvCalculado === rutDV.toUpperCase();
 }
 
-// Función para guardar la ficha
 function guardarFicha() {
-  const rutCompleto = document.getElementById("rutCompleto").value.trim().toUpperCase();
+  const rutNumero = document.getElementById("rutNumero").value.trim();
+  const rutDV = document.getElementById("rutDV").value.trim().toUpperCase();
   const nombres = document.getElementById("nombres").value.trim();
-  const apellidoPaterno = document.getElementById("apellidoPaterno").value.trim();
-  const apellidoMaterno = document.getElementById("apellidoMaterno").value.trim();
+  const apellidoPaterno = document
+    .getElementById("apellidoPaterno")
+    .value.trim();
+  const apellidoMaterno = document
+    .getElementById("apellidoMaterno")
+    .value.trim();
   const direccion = document.getElementById("direccion").value.trim();
   const ciudad = document.getElementById("ciudad").value.trim();
   const telefono = document.getElementById("telefono").value.trim();
@@ -41,59 +36,57 @@ function guardarFicha() {
   const nacimiento = document.getElementById("nacimiento").value;
   const estadoCivil = document.getElementById("estadoCivil").value;
   const comentarios = document.getElementById("comentarios").value.trim();
-
-  // Regex para validar solo letras en nombres y apellidos
   const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/;
 
-  // Validaciones
-  if (!rutCompleto || !validarRut(rutCompleto)) {
-    alert("Ingrese un RUT válido con guion.");
-    return;
-  }
-
+  // Validación de nombres
   if (!nombres || !nombreRegex.test(nombres)) {
     alert("Ingrese un nombre válido (solo letras y espacios).");
     return;
   }
 
+  // Validación de apellidos
   if (!apellidoPaterno || !nombreRegex.test(apellidoPaterno)) {
     alert("Ingrese un apellido paterno válido (solo letras).");
     return;
   }
-
   if (!apellidoMaterno || !nombreRegex.test(apellidoMaterno)) {
     alert("Ingrese un apellido materno válido (solo letras).");
     return;
   }
 
+  // Validación de email
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(email)) {
     alert("Email inválido. Ingrese un correo electrónico válido.");
     return;
   }
 
+  // Validación de fecha de nacimiento
   const hoy = new Date().toISOString().split("T")[0];
   if (!nacimiento || nacimiento > hoy) {
-    alert("Fecha de nacimiento inválida. No puede ser en el futuro.");
+    alert("Fecha de nacimiento inválida. No se puede seleccionar una fecha futura.");
     return;
   }
 
+  // Validación de RUT
+  if (!validarRut(rutNumero, rutDV)) {
+    alert("RUT inválido. Ingrese RUT válido.");
+    return;
+  }
+
+  // Validación de teléfono
   if (!/^\d{7,15}$/.test(telefono)) {
     alert("Teléfono inválido. Solo números y entre 7 a 15 dígitos.");
     return;
   }
 
-  // Verificación de campos vacíos
-  const campos = [rutCompleto, nombres, apellidoPaterno, apellidoMaterno, direccion, ciudad, telefono, email, nacimiento, estadoCivil];
-  const camposNombres = ["RUT", "Nombre", "Apellido Paterno", "Apellido Materno", "Dirección", "Ciudad", "Teléfono", "Email", "Fecha de Nacimiento", "Estado Civil"];
-
-  for (let i = 0; i < campos.length; i++) {
-    if (!campos[i]) {
-      alert(`Por favor, rellene el campo de ${camposNombres[i]}.`);
-      return;
-    }
+  // Validación de email
+  if (!email.includes("@")) {
+    alert("Email inválido.");
+    return;
   }
 
+  const rutCompleto = `${rutNumero}-${rutDV}`;
   const ficha = {
     rut: rutCompleto,
     nombres,
@@ -119,28 +112,31 @@ function guardarFicha() {
   window.location.href = "agradecimiento.html";
 }
 
-// Función para buscar por RUT
-function buscarPorRut() {
-  const rutBuscado = document.getElementById("buscarRut").value.trim().toUpperCase();
+function buscarPorApellido() {
+  const apellidoBuscado = document
+    .getElementById("buscarApellido")
+    .value.trim()
+    .toLowerCase();
 
-  // Verifica si hay un RUT ingresado
-  if (!rutBuscado) {
-    alert("Por favor ingrese un RUT con guion para buscar.");
-    return;
+  for (let key in localStorage) {
+    if (localStorage.hasOwnProperty(key)) {
+      try {
+        const ficha = JSON.parse(localStorage.getItem(key));
+        if (
+          ficha.apellidoPaterno &&
+          ficha.apellidoPaterno.toLowerCase() === apellidoBuscado
+        ) {
+          sessionStorage.setItem("pacienteBuscado", JSON.stringify(ficha));
+          window.location.href = "datosBusqueda.html";
+          return;
+        }
+      } catch (e) {
+        console.error("Error al leer una ficha:", e);
+      }
+    }
   }
 
-  const fichaGuardada = localStorage.getItem(rutBuscado);
-  if (fichaGuardada) {
-    const ficha = JSON.parse(fichaGuardada);
-    sessionStorage.setItem("pacienteBuscado", JSON.stringify(ficha));
-    window.location.href = "datosBusqueda.html";
-  } else {
-    alert("No se encontró un paciente con ese RUT.");
-  }
+  alert("No se encontró ningún paciente con ese apellido paterno.");
 }
-
-// Configuración del campo de fecha para no permitir fechas futuras y hasta el año 2028
-const maxFecha = new Date(2028, 11, 31); // El último día de diciembre de 2028
-document.getElementById("nacimiento").setAttribute("max", maxFecha.toISOString().split("T")[0]);
 
 
