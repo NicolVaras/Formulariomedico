@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha Médica</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Formulario de Ficha Médica</h1>
+      <form id="fichaForm">
+        <label
+          >RUT:
+          <div style="display: flex; gap: 5px">
+            <input
+              type="text"
+              id="rutNumero"
+              maxlength="8"
+              placeholder="12345678"
+              required
+            />
+            <label style="align-self: center">-</label>
+            <input
+              type="text"
+              id="rutDV"
+              maxlength="1"
+              placeholder="K"
+              style="width: 40px"
+              required
+            />
+          </div>
+        </label>
+        <label>Nombres:<input type="text" id="nombres" required /></label>
+        <label
+          >Apellido Paterno:<input type="text" id="apellidoPaterno" required
+        /></label>
+        <label
+          >Apellido Materno:<input type="text" id="apellidoMaterno" required
+        /></label>
+        <label>Dirección:<input type="text" id="direccion" required /></label>
+        <label>Ciudad:<input type="text" id="ciudad" required /></label>
+        <label>Teléfono:<input type="tel" id="telefono" required /></label>
+        <label>Email:<input type="email" id="email" required /></label>
+        <label
+          >Fecha de Nacimiento:<input type="date" id="nacimiento" required
+        /></label>
+        <label
+          >Estado Civil:
+          <select id="estadoCivil" required>
+            <option value="">Seleccione</option>
+            <option value="Soltero/a">Soltero/a</option>
+            <option value="Casado/a">Casado/a</option>
+            <option value="Divorciado/a">Divorciado/a</option>
+            <option value="Viudo/a">Viudo/a</option>
+          </select>
+        </label>
+        <label>Comentarios:<textarea id="comentarios"></textarea></label>
+
+        <div class="buttons">
+          <button type="button" onclick="guardarFicha()">Guardar</button>
+          <button type="reset">Limpiar</button>
+        </div>
+      </form>
+
+      <div class="search">
+        <h2>Buscar por Apellido Paterno</h2>
+        <input
+          type="text"
+          id="buscarApellido"
+          placeholder="Ingrese Apellido Paterno"
+        />
+        <button onclick="buscarPorApellido()">Buscar</button>
+      </div>
+
+      <div id="resultados"></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

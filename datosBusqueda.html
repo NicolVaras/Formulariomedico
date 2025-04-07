@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Datos del Paciente</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+        background: #f9f9f9;
+      }
+      .contenedor {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+      }
+      .dato {
+        margin: 10px 0;
+      }
+      .dato strong {
+        display: inline-block;
+        width: 180px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contenedor">
+      <h1>Datos del Paciente</h1>
+      <div id="datosPaciente"></div>
+      <div style="text-align: center; margin-top: 20px">
+        <a href="index.html">← Volver</a>
+      </div>
+    </div>
+
+    <script>
+      const paciente = JSON.parse(sessionStorage.getItem("pacienteBuscado"));
+
+      if (paciente) {
+        const contenedor = document.getElementById("datosPaciente");
+        contenedor.innerHTML = `
+        <div class="dato"><strong>RUT:</strong> ${paciente.rut}</div>
+        <div class="dato"><strong>Nombres:</strong> ${paciente.nombres}</div>
+        <div class="dato"><strong>Apellido Paterno:</strong> ${paciente.apellidoPaterno}</div>
+        <div class="dato"><strong>Apellido Materno:</strong> ${paciente.apellidoMaterno}</div>
+        <div class="dato"><strong>Dirección:</strong> ${paciente.direccion}</div>
+        <div class="dato"><strong>Ciudad:</strong> ${paciente.ciudad}</div>
+        <div class="dato"><strong>Teléfono:</strong> ${paciente.telefono}</div>
+        <div class="dato"><strong>Email:</strong> ${paciente.email}</div>
+        <div class="dato"><strong>Fecha de Nacimiento:</strong> ${paciente.nacimiento}</div>
+        <div class="dato"><strong>Estado Civil:</strong> ${paciente.estadoCivil}</div>
+        <div class="dato"><strong>Comentarios:</strong> ${paciente.comentarios}</div>
+      `;
+      } else {
+        document.getElementById("datosPaciente").innerHTML =
+          "<p>No se encontró información.</p>";
+      }
+    </script>
+  </body>
+</html>
