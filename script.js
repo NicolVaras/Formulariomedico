@@ -1,3 +1,4 @@
+// Función para calcular el DV
 function calcularDV(rut) {
   let suma = 0;
   let multiplo = 2;
@@ -13,12 +14,14 @@ function calcularDV(rut) {
   return resto.toString();
 }
 
+// Función para validar el RUT con su DV
 function validarRut(rutNumero, rutDV) {
   if (!/^\d{7,8}$/.test(rutNumero)) return false;
   const dvCalculado = calcularDV(rutNumero);
   return dvCalculado === rutDV.toUpperCase();
 }
 
+// Función para guardar la ficha
 function guardarFicha() {
   const rutNumero = document.getElementById("rutNumero").value.trim();
   const rutDV = document.getElementById("rutDV").value.trim().toUpperCase();
@@ -79,11 +82,6 @@ function guardarFicha() {
     return;
   }
 
-  if (!email.includes("@")) {
-    alert("Email inválido.");
-    return;
-  }
-
   // Verificación de campos vacíos
   const campos = [rutNumero, rutDV, nombres, apellidoPaterno, apellidoMaterno, direccion, ciudad, telefono, email, nacimiento, estadoCivil];
   const camposNombres = ["RUT", "Nombre", "Apellido Paterno", "Apellido Materno", "Dirección", "Ciudad", "Teléfono", "Email", "Fecha de Nacimiento", "Estado Civil"];
@@ -121,8 +119,15 @@ function guardarFicha() {
   window.location.href = "agradecimiento.html";
 }
 
+// Función para buscar por RUT
 function buscarPorRut() {
   const rutBuscado = document.getElementById("buscarRut").value.trim().toUpperCase();
+  
+  // Verifica si hay un RUT ingresado
+  if (!rutBuscado) {
+    alert("Por favor ingrese un RUT para buscar.");
+    return;
+  }
 
   const fichaGuardada = localStorage.getItem(rutBuscado);
   if (fichaGuardada) {
@@ -137,4 +142,3 @@ function buscarPorRut() {
 // Configuración del campo de fecha para no permitir fechas futuras y hasta el año 2028
 const maxFecha = new Date(2028, 11, 31); // El último día de diciembre de 2028
 document.getElementById("nacimiento").setAttribute("max", maxFecha.toISOString().split("T")[0]);
-
