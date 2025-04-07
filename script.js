@@ -134,7 +134,7 @@ function buscarPorRut() {
   }
 }
 
-// Configuración del campo de fecha para no permitir fechas futuras
-document.getElementById("nacimiento").setAttribute("max", new Date().toISOString().split("T")[0]);
-
+// Configuración del campo de fecha para no permitir fechas futuras y hasta el año 2028
+const maxFecha = new Date(2028, 11, 31); // El último día de diciembre de 2028
+document.getElementById("nacimiento").setAttribute("max", maxFecha.toISOString().split("T")[0]);
 
